@@ -47,6 +47,7 @@ function App() {
   const [editedFirstName, setEditedFirstName] = useState("");
   const [editedLastName, setEditedLastName] = useState("");
   const [editedGroup, setEditedGroup] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     axios
@@ -109,13 +110,24 @@ function App() {
     }
   };
 
+  const filteredStudents = students.filter((student) => {
+    const fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
+    return fullName.includes(searchQuery.toLowerCase());
+  });
+
   return (
     <Container>
       <h1>Students</h1>
+      <StyledInput 
+        type="text"
+        placeholder="Search..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       <StudentForm addStudent={addStudent} />
       <StyledList>
         <StudentList
-          students={students}
+          students={filteredStudents}
           deleteStudent={deleteStudent}
           editStudent={editStudent}
           editingId={editingId}
